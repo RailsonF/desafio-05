@@ -28,7 +28,8 @@ def calcular_total(conn, pedido_id):
 
     frete = 0.0 if subtotal >= 150 else frete_cheio
 
-    total = subtotal + frete
-    desconto = min(cupom, total)
-    total = total - desconto - estornado
+    # O cupom desconta só os produtos: o teto do desconto é o subtotal,
+    # nunca subtotal + frete (senão um cupom alto zera o frete).
+    desconto = min(cupom, subtotal)
+    total = (subtotal - desconto) + frete - estornado
     return round(total, 2)
